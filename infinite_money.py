@@ -28,7 +28,7 @@ def getMyPosition (prcSoFar):
 
     # Build your function body here
 
-    current_day = np.shape(prcSoFar)[0]
+    current_day = np.shape(prcSoFar)[1]
 
     for i in range(nInst):
         trend = []
@@ -37,37 +37,38 @@ def getMyPosition (prcSoFar):
         #       if True, price increased, if False, price decreased
         if (current_day > NUMBER_OF_DAYS):
             for x in range(NUMBER_OF_DAYS):
-                if prcSoFar[current_day - x, stock_number] - prcSoFar[current_day - x - 1, stock_number] > 0:
+                price_difference = prcSoFar[stock_number - 1, current_day - x] - prcSoFar[stock_number - 1, current_day - x - 1]
+                if price_difference > 0:
                     trend.append(True)
-                elif prcSoFar[current_day - x, stock_number] - prcSoFar[current_day - x - 1, stock_number] < 0:
+                elif price_difference < 0:
                     trend.append(False)
                 else:
                     trend.append(None)
 
-        consecutive_price_increase = True
-        consecutive_price_decrease = True
+            consecutive_price_increase = True
+            consecutive_price_decrease = True
 
-        if trend[0] == True:
-            consecutive_price_decrease = False
-            for x in range(NUMBER_OF_DAYS - 1):
-                if trend[x + 1] != True:
-                    consecutive_price_increase = False
-                    break
+            if trend[0] == True:
+                consecutive_price_decrease = False
+                for x in range(NUMBER_OF_DAYS - 1):
+                    if trend[x + 1] != True:
+                        consecutive_price_increase = False
+                        break
 
-        elif trend[0] == False:
-            consecutive_price_increase = False
-            for x in range(NUMBER_OF_DAYS - 1):
-                if trend[x + 1] != False:
-                    consecutive_price_increase = False
-                    break
-        else:
-            consecutive_price_increase = False
-            consecutive_price_decrease = False
+            elif trend[0] == False:
+                consecutive_price_increase = False
+                for x in range(NUMBER_OF_DAYS - 1):
+                    if trend[x + 1] != False:
+                        consecutive_price_increase = False
+                        break
+            else:
+                consecutive_price_increase = False
+                consecutive_price_decrease = False
 
-        if consecutive_price_increase:
-            currentPos[stock_number] += 1
-        elif consecutive_price_decrease:
-            currentPos[stock_number] -= 1
+            if consecutive_price_increase:
+                currentPos[stock_number] += 1
+            elif consecutive_price_decrease:
+                currentPos[stock_number] -= 1
 
     return currentPos
 
