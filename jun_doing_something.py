@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import math
 
 mpl.rcParams['figure.dpi'] = 150
 
@@ -28,8 +29,8 @@ def getMyPosition(prcSoFar):
     global currentPos
 
     # Build your function body here
-    print("PRCSOFAR", prcSoFar)
-    print(prcSoFar[1, 0])
+    # print("PRCSOFAR", prcSoFar)
+    # print(prcSoFar[1, 0])
 
     current_day = np.shape(prcSoFar)[1] - 1
     print("CURRENT_DAY", current_day)
@@ -47,12 +48,15 @@ def getMyPosition(prcSoFar):
     index = index_sum / 100
 
     # If the stock is more expensive than the average, buy, else, sell
+    prc_gap = index_sum * 0.1
     for i in range(nInst):
-        if (prcSoFar[i, current_day] / init_stock_price[i]) > index:
-            currentPos[i] = -100
-        elif (prcSoFar[i, current_day] / init_stock_price[i]) < index:
-            currentPos[i] = 100
-        else:
+        max_trade = np.floor(10000 / prcSoFar[i, current_day])
+        if (prcSoFar[i, current_day] / init_stock_price[i]) > index - prc_gap:
+            currentPos[i] = -max_trade
+        elif (prcSoFar[i, current_day] / init_stock_price[i]) < index + prc_gap:
+            currentPos[i] = max_trade
+
+        if (prcSoFar[i, current_day] / init_stock_price[i]) == index:
             currentPos[i] = 0
 
     return currentPos
