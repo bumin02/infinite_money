@@ -9,14 +9,17 @@ mpl.rcParams['figure.dpi'] = 150
 # prices_data.plot()
 # plt.show()
 
-nInst=100
-# nInst=3
+# nInst=100
+nInst=3
 currentPos = np.zeros(nInst)
 init_stock_price = np.zeros(nInst)
 
 
 def getMyPosition(prcSoFar): # called ONCE every DAY
     global currentPos
+
+    for x in range(len(prcSoFar)):
+        print(x, prcSoFar[x][-1])
 
     # Build your function body here
     # print("PRCSOFAR", prcSoFar)
@@ -61,6 +64,99 @@ def getMyPosition(prcSoFar): # called ONCE every DAY
         price_ratio_std_mean_dict[stock_pair] = [np.std(price_ratio_dict[stock_pair]), np.mean(price_ratio_dict[stock_pair])]
 
     # print("PRICE RATIO STDEV DICT", price_ratio_std_mean_dict)
+
+    # plt.rcParams["figure.figsize"] = [7.50, 3.50]
+    # plt.rcParams["figure.autolayout"] = True
+
+    # # y = np.price_ratio_dict[(0, 2)]
+    # # x = np.sort(y)
+
+    # plt.title = "Stock pair price ratios"
+    # plt.plot(price_ratio_dict[(0, 2)], color = "blue")
+
+    # plt.show()
+
+    """ PSEUDOCODE 
+    
+    Get today's price ratio
+    
+    1. PR is above the mean but below +STDEV:
+        sell X of the overperformer
+        buy X of the underperformer
+
+    2. PR is above +STDEV but below ++STDEV:
+        sell XX of the overperformer
+        buy XX of the underperformer
+
+    3. PR is above ++STDEV:
+        sell XXX of the overperformer
+        buy XXX of the underperformer
+    
+    """
+
+    # for i in range(stock_days):
+    #     if i < stock_days:
+    #         for x in range(len(prcSoFar)):
+
+    for pair in price_ratio_dict:
+
+        PR_mean = price_ratio_std_mean_dict[pair][1]
+
+        PR_stdev_1 = PR_mean + price_ratio_std_mean_dict[pair][0]
+        PR_stdev_2 = PR_stdev_1 + price_ratio_std_mean_dict[pair][0]
+        PR_stdev_1a = PR_mean - price_ratio_std_mean_dict[pair][0]
+        PR_stdev_2a = PR_stdev_1 - price_ratio_std_mean_dict[pair][0]
+
+        latest_pr = pair, price_ratio_dict[pair][-1]
+        # should print the latest day's price ratio
+
+        if latest_pr == PR_mean:
+            pass
+
+        elif latest_pr > PR_mean and PR_stdev_1 > latest_pr:
+            # sell X of the overperformer
+            # buy X of the underperformer
+
+            """ first determine who the under/over-performers are"""
+            
+
+            pass
+
+        elif latest_pr > PR_stdev_1 and PR_stdev_2 > latest_pr:
+            # sell XX of the overperformer
+            # buy XX of the underperformer
+            pass
+
+        elif latest_pr > PR_stdev_2:
+            # sell XXX of the overperformer
+            # buy XXX of the underperformer
+            pass
+
+        elif latest_pr < PR_mean and PR_stdev_1a < latest_pr:
+            # buy X of the overperformer
+            # sell X of the underperformer
+            pass
+        
+        elif latest_pr < PR_stdev_1a and PR_stdev_2a < latest_pr:
+            # buy XX of the overperformer
+            # sell XX of the underperformer
+            pass
+
+        else:
+            # buy XXX of the overperformer
+            # sell XXX of the underperformer
+            pass
+
+
+
+    #  Compare today's PR with above measures
+
+
+
+
+
+
+
 
 
 
