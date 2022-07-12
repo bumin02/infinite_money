@@ -15,7 +15,7 @@ currentPos = np.zeros(nInst)
 init_stock_price = np.zeros(nInst)
 
 
-def getMyPosition(prcSoFar):
+def getMyPosition(prcSoFar): # called ONCE every DAY
     global currentPos
 
     # Build your function body here
@@ -50,6 +50,21 @@ def getMyPosition(prcSoFar):
                         price_ratio_dict[(x, y)] = [ratio]
 
     # print("DICT", price_ratio_dict)
+    # print(price_ratio_dict[(0,1)])
+    # print("STDEV", np.std(price_ratio_dict[(0,1)]))
+
+    # print("MEAN", np.mean(price_ratio_dict[(0,1)]))
+    # print(price_ratio_dict[(0,1)])
+    price_ratio_std_mean_dict = {}
+
+    for stock_pair in price_ratio_dict: # will store in dictionary (stock pair):[stdev of PRs, mean of PRs]
+        price_ratio_std_mean_dict[stock_pair] = [np.std(price_ratio_dict[stock_pair]), np.mean(price_ratio_dict[stock_pair])]
+
+    # print("PRICE RATIO STDEV DICT", price_ratio_std_mean_dict)
+
+
+
+
 
 
 
@@ -100,3 +115,6 @@ def createHashMap():
 #                 ratio = arr[x][i] / arr[y][i]
 #                 print(ratio)
 
+# arr = [20, 2, 7, 1, 34]
+
+# print(np.std(arr))
